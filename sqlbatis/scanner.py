@@ -101,7 +101,7 @@ class ModelScanner(Scanner):
         relative_files = self._convert_to_relative_path(files)
 
         for file in relative_files:
-            _module = '.'.join(file.split('/')[1:])
+            _module = '.'.join(file.split(os.sep)[1:])
             _models = self._get_model_class_in_the_module(_module)
             self.models.extend(_models)
 
