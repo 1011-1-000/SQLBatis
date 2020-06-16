@@ -5,12 +5,10 @@ from functools import wraps
 from ._internals import _parse_signature
 from .errors import ConnectionException, QueryException
 from .connection import Connection, connections
-# from .transaction_manager import TransactionManager
-
-# sqlbatis_local = Local()
+from .container import SQLBatisMetaClass
 
 
-class SQLBatis:
+class SQLBatis(metaclass=SQLBatisMetaClass):
     """The basic object to do the query with raw sql
     """
 
@@ -103,6 +101,9 @@ class SQLBatis:
             return wrapper
 
         return db_query
+
+    def transactional(self):
+        pass
 
     def __enter__(self):
         return self

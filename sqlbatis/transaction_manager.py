@@ -21,7 +21,7 @@ class TransactionManager:
 
     def transactional(self, propagation=Propagation.REQUIRED):
 
-        def _transaction(func):
+        def _transactional(func):
             @wraps(func)
             def wrapper(*args, **kwargs):
                 try:
@@ -33,7 +33,7 @@ class TransactionManager:
                     self.cleanup_transaction(propagation)
             return wrapper
 
-        return _transaction
+        return _transactional
 
     def get_transaction(self, propagation):
         connection = connections.top

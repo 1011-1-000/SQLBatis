@@ -20,3 +20,7 @@ class PrimaryKeyMissingException(SQLBatisException):
 
 class PropagationException(SQLBatisException):
     pass
+
+
+class ContainerException(SQLBatisException):
+    pass
