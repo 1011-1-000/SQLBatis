@@ -1,16 +1,17 @@
 from functools import wraps
-from sqlbatis.sqlbatis import sqlbatis_local
+from .errors import PropagationException
+from sqlbatis.connection import Connection, connections
 
 
 class Propagation:
 
     REQUIRED = 1
     REQUIRED_NEW = 2
-    SUPPORTED = 3
-    NOT_SUPPORTED = 4
-    NEVER = 5
-    MANDATORY = 6
-    NESTED = 7
+    # SUPPORTED = 3
+    # NOT_SUPPORTED = 4
+    # NEVER = 5
+    # MANDATORY = 6
+    # NESTED = 7
 
 
 class TransactionManager:
@@ -24,16 +25,28 @@ class TransactionManager:
             @wraps(func)
             def wrapper(*args, **kwargs):
                 try:
-                    if not hasattr(sqlbatis_local, 'connection'):
-                        sqlbatis_local.connection = self.db.get_connection()
-
-                    with sqlbatis_local.connection.begin():
+                    with self.get_transaction(propagation):
                         results = func(*args, **kwargs)
                         return results
+
                 finally:
-                    if hasattr(sqlbatis_local, 'connection'):
-                        sqlbatis_local.connection.close()
-                    sqlbatis_local.__release_local__()
+                    self.cleanup_transaction(propagation)
             return wrapper
 
         return _transaction
+
+    def get_transaction(self, propagation):
+        connection = connections.top
+        if not connection:
+            connection = Connection(self.db.engine.connect())
+            connections.push(connection)
+
+        return connection.begin()
+
+    def cleanup_transaction(self, propagation):
+        connection = connections.top
+        if connection.in_transaction():
+            pass
+        else:
+            connection.close()
+            connections.pop()

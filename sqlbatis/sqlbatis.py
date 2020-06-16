@@ -1,12 +1,13 @@
 from sqlalchemy import *
-from werkzeug.local import Local
+from werkzeug.local import Local, LocalStack
 from functools import wraps
 
 from ._internals import _parse_signature
 from .errors import ConnectionException, QueryException
-from .connection import Connection
+from .connection import Connection, connections
+# from .transaction_manager import TransactionManager
 
-sqlbatis_local = Local()
+# sqlbatis_local = Local()
 
 
 class SQLBatis:
@@ -34,22 +35,20 @@ class SQLBatis:
             self.open = False
 
     def get_connection(self):
-        """The function to get the connection object that defined, we will try to get
-        the connection follow the steps below:
-        1. try to find the connection in the local object, if yes, will return the same connection, 
-        2. otherwise we will create a new connection
+        """The function to get the connection, all the connections are in the localstack object
 
-        :raises ConnectionException: if the engine is closed, the connection will be created 
+        :raises ConnectionException: if the engine is closed, the connection will be created
         :return: return a connection for query
         :rtype: Connection
         """
-        if hasattr(sqlbatis_local, 'connection') and sqlbatis_local.connection:
-            return sqlbatis_local.connection
+        if connections.top:
+            return connections.top
         else:
             if not self.open:
                 raise ConnectionException('Database connection closed')
             conn = self.engine.connect()
-            return Connection(conn)
+            connections.push(Connection(conn))
+            return connections.top
 
     def query(self, sql, fetch_all=False):
         """The decorator that using for the raw sql query, the simple example for usage is like:
@@ -77,7 +76,6 @@ class SQLBatis:
                         results = conn.query(sql, fetch_all, **parameters)
                         return results
                     except Exception:
-                        conn.close()
                         raise QueryException('Error querying database')
 
             return wrapper
@@ -100,24 +98,11 @@ class SQLBatis:
                         results = conn.bulk_query(sql, *args)
                         return results
                     except Exception:
-                        conn.close()
                         raise Exception('Error querying database')
+
             return wrapper
 
         return db_query
-
-    def _get_connection_from_thread_local(self):
-        if hasattr(sqlbatis_local, 'connection') and sqlbatis_local.connection:
-            return sqlbatis_local.connection
-        else:
-            return None
-
-    def _create_connection(self):
-        if not self.open:
-            raise ConnectionException('Database connection closed')
-
-        conn = self.engine.connect()
-        return Connection(conn)
 
     def __enter__(self):
         return self
