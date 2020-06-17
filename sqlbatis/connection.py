@@ -1,6 +1,10 @@
 from sqlalchemy import text
 from .row import Row, RowSet
 
+from werkzeug.local import LocalStack, LocalProxy
+
+connections = LocalStack()
+
 
 class Connection:
     """The wrapper of the sqlalchemy raw connection
@@ -109,5 +113,6 @@ class Connection:
 
     def __exit__(self, exc, val, traceback):
         # if the current connection is in transaction will not close immediately
-        if not (self.closed or self.in_transaction()):
+        if not self.in_transaction():
             self.close()
+            connections.pop()

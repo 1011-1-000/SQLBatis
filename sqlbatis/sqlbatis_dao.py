@@ -1,19 +1,19 @@
 from .utils import camel_to_snake_case
 from .errors import TableMissingException, PrimaryKeyMissingException
+from .container import SQLBatisMetaClass
 
 
-class SQLBatisDao:
+class SQLBatisDao(metaclass=SQLBatisMetaClass):
     """Basic Dao operations provided by the SQLBatis
     """
 
-    def __init__(self, db):
+    def __init__(self):
         """Initialization of the Dao
-
-        :param db: The SQLBatis instance
-        :type db: SQLBatis
         """
-        self.db = db
         self.table = self._get_table_in_metadata()
+
+    def __autowired__(self, SQLBatis):
+        pass
 
     def _get_table_in_metadata(self):
         """Get the metadata of current dao object
@@ -22,7 +22,7 @@ class SQLBatisDao:
         :return: table metadata
         :rtype: Table
         """
-        tables = self.db.metadata.tables  # or self.db.reflect_tables()
+        tables = self.SQLBatis.metadata.tables  # or self.db.reflect_tables()
         table_name = self._get_table_name()
         if table_name not in tables:
             raise TableMissingException(
@@ -37,7 +37,7 @@ class SQLBatisDao:
         :return: the primary key of the inserted record
         :rtype: int
         """
-        with self.db.get_connection() as conn:
+        with self.SQLBatis.get_connection() as conn:
             result = conn.execute(self.table.insert().values(attrs),
                                   inserted_primary_key=True)
             return result
@@ -50,7 +50,7 @@ class SQLBatisDao:
         :return: the row which id is _id 
         :rtype: Row 
         """
-        with self.db.get_connection() as conn:
+        with self.SQLBatis.get_connection() as conn:
             result = conn.execute(self.table.select(), id=_id).first()
             return result
 
@@ -60,7 +60,7 @@ class SQLBatisDao:
         :return: all the rows in the database
         :rtype: RowSet
         """
-        with self.db.get_connection() as conn:
+        with self.SQLBatis.get_connection() as conn:
             result = conn.execute(self.table.select()).all()
             return result
 
@@ -72,7 +72,7 @@ class SQLBatisDao:
         :return: TBI
         :rtype: TBI
         """
-        with self.db.get_connection() as conn:
+        with self.SQLBatis.get_connection() as conn:
             result = conn.execute(
                 self.table.delete().where(self.table.c.id == _id))
             return result
@@ -88,7 +88,7 @@ class SQLBatisDao:
         """
         if 'id' not in attrs:
             raise PrimaryKeyMissingException('Primary key id is missing')
-        with self.db.get_connection() as conn:
+        with self.SQLBatis.get_connection() as conn:
             result = conn.execute(self.table.update().values(attrs))
             return result
 
@@ -100,7 +100,7 @@ class SQLBatisDao:
         :return: TBI 
         :rtype: TBI
         """
-        with self.db.get_connection() as conn:
+        with self.SQLBatis.get_connection() as conn:
             result = conn.execute(self.table.insert().values(attrs))
             return result
 

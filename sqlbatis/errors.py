@@ -16,3 +16,11 @@ class TableMissingException(SQLBatisException):
 
 class PrimaryKeyMissingException(SQLBatisException):
     pass
+
+
+class PropagationException(SQLBatisException):
+    pass
+
+
+class ContainerException(SQLBatisException):
+    pass

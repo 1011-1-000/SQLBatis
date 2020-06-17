@@ -1,39 +1,56 @@
 from functools import wraps
-from sqlbatis.sqlbatis import sqlbatis_local
+from .errors import PropagationException
+from sqlbatis.connection import Connection, connections
+from .container import SQLBatisMetaClass
 
 
 class Propagation:
 
     REQUIRED = 1
     REQUIRED_NEW = 2
-    SUPPORTED = 3
-    NOT_SUPPORTED = 4
-    NEVER = 5
-    MANDATORY = 6
-    NESTED = 7
+    # SUPPORTED = 3
+    # NOT_SUPPORTED = 4
+    # NEVER = 5
+    # MANDATORY = 6
+    # NESTED = 7
 
 
-class TransactionManager:
+class TransactionManager(metaclass=SQLBatisMetaClass):
 
-    def __init__(self, db):
-        self.db = db
+    def __init__(self):
+        super(TransactionManager, self).__init__()
+
+    def __autowired__(self, SQLBatis):
+        pass
 
     def transactional(self, propagation=Propagation.REQUIRED):
 
-        def _transaction(func):
+        def _transactional(func):
             @wraps(func)
             def wrapper(*args, **kwargs):
                 try:
-                    if not hasattr(sqlbatis_local, 'connection'):
-                        sqlbatis_local.connection = self.db.get_connection()
-
-                    with sqlbatis_local.connection.begin():
+                    with self.get_transaction(propagation):
                         results = func(*args, **kwargs)
                         return results
+
                 finally:
-                    if hasattr(sqlbatis_local, 'connection'):
-                        sqlbatis_local.connection.close()
-                    sqlbatis_local.__release_local__()
+                    self.cleanup_transaction(propagation)
             return wrapper
 
-        return _transaction
+        return _transactional
+
+    def get_transaction(self, propagation):
+        connection = connections.top
+        if not connection:
+            connection = Connection(self.SQLBatis.engine.connect())
+            connections.push(connection)
+
+        return connection.begin()
+
+    def cleanup_transaction(self, propagation):
+        connection = connections.top
+        if connection.in_transaction():
+            pass
+        else:
+            connection.close()
+            connections.pop()
