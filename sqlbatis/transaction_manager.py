@@ -1,6 +1,7 @@
 from functools import wraps
 from .errors import PropagationException
 from sqlbatis.connection import Connection, connections
+from .container import SQLBatisMetaClass
 
 
 class Propagation:
@@ -14,10 +15,13 @@ class Propagation:
     # NESTED = 7
 
 
-class TransactionManager:
+class TransactionManager(metaclass=SQLBatisMetaClass):
 
-    def __init__(self, db):
-        self.db = db
+    def __init__(self):
+        super(TransactionManager, self).__init__()
+
+    def __autowired__(self, SQLBatis):
+        pass
 
     def transactional(self, propagation=Propagation.REQUIRED):
 
@@ -38,7 +42,7 @@ class TransactionManager:
     def get_transaction(self, propagation):
         connection = connections.top
         if not connection:
-            connection = Connection(self.db.engine.connect())
+            connection = Connection(self.SQLBatis.engine.connect())
             connections.push(connection)
 
         return connection.begin()

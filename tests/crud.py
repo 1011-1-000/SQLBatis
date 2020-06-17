@@ -1,7 +1,7 @@
 from tests.basic_test import db
 from sqlbatis.transaction_manager import TransactionManager, Propagation
 
-tm = TransactionManager(db)
+tm = TransactionManager()
 
 CREATE = 'INSERT INTO user(name) VALUES (:name)'
 SELECT = 'SELECT * FROM user'

@@ -37,7 +37,7 @@ class SQLBatisContainer:
         :return: the instance
         :rtype: cls instance
         """
-        instance = SQLBatisContainer.__local__[key]
+        instance = SQLBatisContainer.__local__.get(key)
         if instance:
             return instance
         else:
