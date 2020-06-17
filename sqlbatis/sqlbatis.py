@@ -5,9 +5,10 @@ from functools import wraps
 from ._internals import _parse_signature
 from .errors import ConnectionException, QueryException
 from .connection import Connection, connections
-from .container import SQLBatisMetaClass
+from .container import SQLBatisMetaClass, entity
 
 
+@entity
 class SQLBatis(metaclass=SQLBatisMetaClass):
     """The basic object to do the query with raw sql
     """

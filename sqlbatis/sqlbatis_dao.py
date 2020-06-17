@@ -1,6 +1,6 @@
 from .utils import camel_to_snake_case
 from .errors import TableMissingException, PrimaryKeyMissingException
-from .container import SQLBatisMetaClass, sqlbatis_container
+from .container import SQLBatisMetaClass
 
 
 class SQLBatisDao(metaclass=SQLBatisMetaClass):
@@ -10,9 +10,10 @@ class SQLBatisDao(metaclass=SQLBatisMetaClass):
     def __init__(self):
         """Initialization of the Dao
         """
-
-        self.SQLBatis = sqlbatis_container.get_instance('SQLBatis')
         self.table = self._get_table_in_metadata()
+
+    def __autowired__(self, SQLBatis):
+        pass
 
     def _get_table_in_metadata(self):
         """Get the metadata of current dao object
