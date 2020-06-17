@@ -69,5 +69,5 @@ class SQLBatisMetaClass(type):
         obj.__init__(*args, **kwargs)
         key = obj.__class__.__name__
         if SQLBatisContainer.has_key(key):
-            SQLBatisContainer.register(obj.__class__.__name__, obj)
+            SQLBatisContainer.register(key, obj)
         return obj
