@@ -11,6 +11,8 @@ class RowTestCase(BasicTestCase):
     def test_row_2_get(self):
         result = select().first()
         assert result.name == 'leo1'
+        assert result.get('name') == 'leo1'
+        assert result.get(1) == 'leo1'
         assert result[1] == 'leo1'
 
 

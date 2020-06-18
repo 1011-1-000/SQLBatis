@@ -6,14 +6,12 @@ from .container import SQLBatisMetaClass
 class SQLBatisDao(metaclass=SQLBatisMetaClass):
     """Basic Dao operations provided by the SQLBatis
     """
+    __autowired__ = ('SQLBatis',)
 
     def __init__(self):
         """Initialization of the Dao
         """
         self.table = self._get_table_in_metadata()
-
-    def __autowired__(self, SQLBatis):
-        pass
 
     def _get_table_in_metadata(self):
         """Get the metadata of current dao object
