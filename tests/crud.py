@@ -8,6 +8,7 @@ SELECT = 'SELECT * FROM user'
 DELETE = 'DELETE FROM user WHERE id = 1'
 UPDATE = 'UPDATE user SET name = :name WHERE id = 1'
 COUNT = 'SELECT count(*) FROM user'
+SELECT_USER_BY_NAME = 'SELECT * FROM user WHERE name = :name'
 
 
 @db.query(CREATE)
