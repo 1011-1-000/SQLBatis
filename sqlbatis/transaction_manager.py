@@ -17,11 +17,10 @@ class Propagation:
 
 class TransactionManager(metaclass=SQLBatisMetaClass):
 
+    __autowired__ = ('SQLBatis',)
+
     def __init__(self):
         super(TransactionManager, self).__init__()
-
-    def __autowired__(self, SQLBatis):
-        pass
 
     def transactional(self, propagation=Propagation.REQUIRED):
 

@@ -62,9 +62,9 @@ class SQLBatisMetaClass(type):
         """
         obj = cls.__new__(cls, *args, **kwargs)
         if hasattr(obj, '__autowired__'):
-            parameters = list(inspect.signature(
-                obj.__autowired__).parameters.keys())
-            for attr in parameters:
+            autowired_attrs = getattr(obj, '__autowired__')
+            print(autowired_attrs)
+            for attr in autowired_attrs:
                 setattr(obj, attr, SQLBatisContainer.get_instance(attr))
         obj.__init__(*args, **kwargs)
         key = obj.__class__.__name__
