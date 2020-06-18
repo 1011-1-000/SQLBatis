@@ -1,7 +1,7 @@
 from sqlalchemy import text
 from .row import Row, RowSet
 
-from werkzeug.local import LocalStack, LocalProxy
+from werkzeug.local import LocalStack
 
 connections = LocalStack()
 

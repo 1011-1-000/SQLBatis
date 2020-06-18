@@ -1,5 +1,4 @@
 from sqlalchemy import *
-from werkzeug.local import Local, LocalStack
 from functools import wraps
 
 from ._internals import _parse_signature, _parse_signature_for_bulk_query

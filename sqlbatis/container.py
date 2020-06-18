@@ -1,6 +1,4 @@
-import inspect
 from .errors import ContainerException
-from werkzeug.local import Local
 
 
 def entity(cls):
@@ -67,6 +65,6 @@ class SQLBatisMetaClass(type):
                 setattr(obj, attr, SQLBatisContainer.get_instance(attr))
         obj.__init__(*args, **kwargs)
         key = obj.__class__.__name__
-        if SQLBatisContainer.has_key(key):
+        if key in SQLBatisContainer.__local__:
             SQLBatisContainer.register(key, obj)
         return obj

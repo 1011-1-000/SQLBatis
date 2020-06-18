@@ -1,5 +1,4 @@
 from functools import wraps
-from .errors import PropagationException
 from sqlbatis.connection import Connection, connections
 from .container import SQLBatisMetaClass
 
