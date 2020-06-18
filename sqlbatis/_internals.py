@@ -52,3 +52,19 @@ def _parse_signature(func, *args, **kwargs):
             kwargs.update({parameter: value})
 
     return kwargs
+
+
+def _parse_signature_for_bulk_query(func, *args, **kwargs):
+    """
+    retrieve the parameters of the func, and organize as a dict to pass to the db engine
+    """
+    is_function_or_static_method = is_func_or_static_method_in_decorator(
+        func, *args)
+
+    parameters = list(inspect.signature(func).parameters.keys())
+
+    if not is_function_or_static_method:
+        parameters.pop(0)
+        _, *args = args
+
+    return args

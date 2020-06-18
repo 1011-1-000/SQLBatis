@@ -2,7 +2,7 @@ from sqlalchemy import *
 from werkzeug.local import Local, LocalStack
 from functools import wraps
 
-from ._internals import _parse_signature
+from ._internals import _parse_signature, _parse_signature_for_bulk_query
 from .errors import ConnectionException, QueryException
 from .connection import Connection, connections
 from .container import SQLBatisMetaClass, entity
@@ -94,7 +94,9 @@ class SQLBatis(metaclass=SQLBatisMetaClass):
             def wrapper(*args, **kwargs):
                 with self.get_connection() as conn:
                     try:
-                        results = conn.bulk_query(sql, *args)
+                        parameters = _parse_signature_for_bulk_query(
+                            func, *args, **kwargs)
+                        results = conn.bulk_query(sql, *parameters)
                         return results
                     except Exception:
                         raise Exception('Error querying database')
