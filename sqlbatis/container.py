@@ -63,7 +63,6 @@ class SQLBatisMetaClass(type):
         obj = cls.__new__(cls, *args, **kwargs)
         if hasattr(obj, '__autowired__'):
             autowired_attrs = getattr(obj, '__autowired__')
-            print(autowired_attrs)
             for attr in autowired_attrs:
                 setattr(obj, attr, SQLBatisContainer.get_instance(attr))
         obj.__init__(*args, **kwargs)
