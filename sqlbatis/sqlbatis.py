@@ -3,8 +3,8 @@ from functools import wraps
 
 from ._internals import _parse_signature, _parse_signature_for_bulk_query
 from .errors import ConnectionException, QueryException
-from .connection import Connection, connections
-from .container import SQLBatisMetaClass, entity
+from .connection import Connection
+from .container import SQLBatisMetaClass, entity, local
 
 
 @entity
@@ -33,6 +33,23 @@ class SQLBatis(metaclass=SQLBatisMetaClass):
             self.open = False
 
     def get_connection(self):
+        """The function to get the connection, all the connections are in the localstack object
+
+        :raises ConnectionException: if the engine is closed, the connection will be created
+        :return: return a connection for query
+        :rtype: Connection
+        """
+
+        if hasattr(local, 'connection'):
+            return local.connection
+        else:
+            if not self.open:
+                raise ConnectionException('Database connection closed')
+            conn = self.engine.connect()
+            local.connection = Connection(conn)
+            return local.connection
+
+    def get_connection_v1(self):
         """The function to get the connection, all the connections are in the localstack object
 
         :raises ConnectionException: if the engine is closed, the connection will be created
@@ -69,13 +86,13 @@ class SQLBatis(metaclass=SQLBatisMetaClass):
             def wrapper(*args, **kwargs):
 
                 # assemble the arguments
-                parameters = _parse_signature(func, *args, **kwargs)
-                with self.get_connection() as conn:
-                    try:
+                try:
+                    parameters = _parse_signature(func, *args, **kwargs)
+                    with self.get_connection() as conn:
                         results = conn.query(sql, fetch_all, **parameters)
                         return results
-                    except Exception:
-                        raise QueryException('Error querying database')
+                except Exception:
+                    raise QueryException('Error querying database')
 
             return wrapper
 
@@ -92,14 +109,14 @@ class SQLBatis(metaclass=SQLBatisMetaClass):
         def db_query(func):
             @wraps(func)
             def wrapper(*args, **kwargs):
-                with self.get_connection() as conn:
-                    try:
-                        parameters = _parse_signature_for_bulk_query(
-                            func, *args, **kwargs)
+                try:
+                    parameters = _parse_signature_for_bulk_query(
+                        func, *args, **kwargs)
+                    with self.get_connection() as conn:
                         results = conn.bulk_query(sql, *parameters)
                         return results
-                    except Exception:
-                        raise Exception('Error querying database')
+                except Exception:
+                    raise Exception('Error querying database')
 
             return wrapper
 
@@ -111,16 +128,11 @@ class SQLBatis(metaclass=SQLBatisMetaClass):
             @wraps(func)
             def wrapper(*args, **kwargs):
                 try:
-                    transaction = self.get_connection().begin()
-                    results = func(*args, **kwargs)
-                    transaction.commit()
-                    return results
+                    with self.get_connection().begin():
+                        results = func(*args, **kwargs)
+                        return results
                 except Exception as e:
-                    transaction.rollback()
-                finally:
-                    transaction.close()
-                    if not self.get_connection.in_transaction():
-                        self.get_connection.close()
+                    raise Exception('Transaction Error')
 
             return wrapper
         return _transactional

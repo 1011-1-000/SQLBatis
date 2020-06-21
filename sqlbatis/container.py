@@ -1,4 +1,7 @@
 from .errors import ContainerException
+from werkzeug.local import Local
+
+local = Local()
 
 
 def entity(cls):

@@ -1,9 +1,6 @@
 from sqlalchemy import text
 from .row import Row, RowSet
-
-from werkzeug.local import LocalStack
-
-connections = LocalStack()
+from .container import local
 
 
 class Connection:
@@ -17,6 +14,7 @@ class Connection:
         """Close the connection
         """
         self.conn.close()
+        del local.connection
 
     @property
     def closed(self):
@@ -118,4 +116,3 @@ class Connection:
         # if the current connection is in transaction will not close immediately
         if not self.in_transaction():
             self.close()
-            connections.pop()
