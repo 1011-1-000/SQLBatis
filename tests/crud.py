@@ -1,7 +1,5 @@
 from tests.basic_test import db
-from sqlbatis.transaction_manager import TransactionManager, Propagation
 
-tm = TransactionManager()
 
 CREATE = 'INSERT INTO user(name) VALUES (:name)'
 SELECT = 'SELECT * FROM user'
@@ -52,27 +50,27 @@ users = [{
 }]
 
 
-@tm.transactional()
+@db.transactional()
 def transaction_test():
     create(user)
     raise Exception('transaction error')
     create(user)
 
 
-@tm.transactional()
+@db.transactional()
 def transaction_outer_for_inner_exception():
     create(user)
     create(user)
     transaction_inner_for_inner_exception()
 
 
-@tm.transactional()
+@db.transactional()
 def transaction_inner_for_inner_exception():
     create(user)
     raise Exception('transaction error')
 
 
-@tm.transactional()
+@db.transactional()
 def transaction_outer_for_outer_exception():
     create(user)
     transaction_inner_for_outer_exception()
@@ -80,32 +78,6 @@ def transaction_outer_for_outer_exception():
     create(user)
 
 
-@tm.transactional()
+@db.transactional()
 def transaction_inner_for_outer_exception():
-    create(user)
-
-
-@tm.transactional(propagation=Propagation.REQUIRED_NEW)
-def prn_transaction_outer_for_inner_exception():
-    create(user)
-    create(user)
-    prn_transaction_inner_for_inner_exception()
-
-
-@tm.transactional(propagation=Propagation.REQUIRED_NEW)
-def prn_transaction_inner_for_inner_exception():
-    create(user)
-    raise Exception('transaction error')
-
-
-@tm.transactional(propagation=Propagation.REQUIRED_NEW)
-def prn_transaction_outer_for_outer_exception():
-    create(user)
-    prn_transaction_inner_for_outer_exception()
-    raise Exception('transaction error')
-    create(user)
-
-
-@tm.transactional(propagation=Propagation.REQUIRED_NEW)
-def prn_transaction_inner_for_outer_exception():
     create(user)

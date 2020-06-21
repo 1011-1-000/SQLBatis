@@ -1,9 +1,6 @@
 from sqlalchemy import text
 from .row import Row, RowSet
-
-from werkzeug.local import LocalStack, LocalProxy
-
-connections = LocalStack()
+from .container import SQLBatisContainer
 
 
 class Connection:
@@ -16,7 +13,9 @@ class Connection:
     def close(self):
         """Close the connection
         """
+        local = SQLBatisContainer.__local__
         self.conn.close()
+        del local.connection
 
     @property
     def closed(self):
@@ -87,6 +86,9 @@ class Connection:
         """
         return self.conn.begin()
 
+    def begin_nested(self):
+        return self.conn.begin_nested()
+
     def _result_proxy_to_rowset(self, result_proxy, fetch_all):
         """Convert the ResultProxy object of the query result RowSet which defined in the
         SQLBatis
@@ -115,4 +117,3 @@ class Connection:
         # if the current connection is in transaction will not close immediately
         if not self.in_transaction():
             self.close()
-            connections.pop()

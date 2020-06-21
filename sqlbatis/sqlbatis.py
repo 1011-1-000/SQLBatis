@@ -1,11 +1,10 @@
 from sqlalchemy import *
-from werkzeug.local import Local, LocalStack
 from functools import wraps
 
 from ._internals import _parse_signature, _parse_signature_for_bulk_query
-from .errors import ConnectionException, QueryException
-from .connection import Connection, connections
-from .container import SQLBatisMetaClass, entity
+from .errors import ConnectionException, QueryException, TransactionException
+from .connection import Connection
+from .container import SQLBatisMetaClass, entity, SQLBatisContainer
 
 
 @entity
@@ -40,14 +39,16 @@ class SQLBatis(metaclass=SQLBatisMetaClass):
         :return: return a connection for query
         :rtype: Connection
         """
-        if connections.top:
-            return connections.top
+        local = SQLBatisContainer.__local__
+
+        if hasattr(local, 'connection'):
+            return local.connection
         else:
             if not self.open:
                 raise ConnectionException('Database connection closed')
             conn = self.engine.connect()
-            connections.push(Connection(conn))
-            return connections.top
+            local.connection = Connection(conn)
+            return local.connection
 
     def query(self, sql, fetch_all=False):
         """The decorator that using for the raw sql query, the simple example for usage is like:
@@ -69,13 +70,14 @@ class SQLBatis(metaclass=SQLBatisMetaClass):
             def wrapper(*args, **kwargs):
 
                 # assemble the arguments
-                parameters = _parse_signature(func, *args, **kwargs)
-                with self.get_connection() as conn:
-                    try:
+                try:
+                    parameters = _parse_signature(func, *args, **kwargs)
+                    with self.get_connection() as conn:
                         results = conn.query(sql, fetch_all, **parameters)
                         return results
-                    except Exception:
-                        raise QueryException('Error querying database')
+                except Exception as e:
+                    raise QueryException(
+                        'Query Exception in func [{}]'.format(func.__name__)) from e
 
             return wrapper
 
@@ -92,21 +94,56 @@ class SQLBatis(metaclass=SQLBatisMetaClass):
         def db_query(func):
             @wraps(func)
             def wrapper(*args, **kwargs):
-                with self.get_connection() as conn:
-                    try:
-                        parameters = _parse_signature_for_bulk_query(
-                            func, *args, **kwargs)
+                try:
+                    parameters = _parse_signature_for_bulk_query(
+                        func, *args, **kwargs)
+                    with self.get_connection() as conn:
                         results = conn.bulk_query(sql, *parameters)
                         return results
-                    except Exception:
-                        raise Exception('Error querying database')
+                except Exception as e:
+                    raise QueryException(
+                        'Query Exception in func [{}]'.format(func.__name__)) from e
 
             return wrapper
 
         return db_query
 
     def transactional(self):
-        pass
+        """The decorator that for do the transaction, the useage of this is:
+
+        @db.transactional()
+        def transaction_needed_func():
+            do(1)
+            do(2)
+
+        any error occurred, the changes will be rolled back
+
+        also include the nested transaction, consider the scenario like this:
+        @db.transactional():
+        def transaction_func_1():
+            do(1)
+            transaction_func_2()
+
+        @db.transactional()
+        def transaction_func_2():
+            do(2) 
+
+        if the transaction_func_2 is failed, the result of the do(1) also will rolled back
+        """
+
+        def _transactional(func):
+            @wraps(func)
+            def wrapper(*args, **kwargs):
+                try:
+                    with self.get_connection().begin():
+                        results = func(*args, **kwargs)
+                        return results
+                except Exception as e:
+                    raise TransactionException(
+                        'Transaction Exception in func [{}]'.format(func.__name__)) from e
+
+            return wrapper
+        return _transactional
 
     def __enter__(self):
         return self
