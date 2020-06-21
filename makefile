@@ -35,8 +35,8 @@ clean:clean-pyc clean-dist clean-migrations
 check:
 	flake8 --ignore=E501,W291,F405,F403 --exclude=tests,migrations,__init__.py
 
-# doc: 
-# 	cd docs; make html
+doc: 
+	cd docs; make html
 
 publish: 
 	python setup.py publish

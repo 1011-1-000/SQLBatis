@@ -1,3 +1,22 @@
+"""
+Provide the cli to interact with DB through command-line
+
+Usage: sqlbatis [OPTIONS] COMMAND [ARGS]...
+
+Options:
+  --help  Show this message and exit.
+
+Commands:
+  **scan**       Show all the models that searched in the directory
+
+  **init**       Init the db tools
+
+  **migrate**    Generate the migrate script
+
+  **upgrade**    Upgrade the db to the version specified, if not sepecified will update to the latest version
+  
+  **downgrade**: Downgrade the db to the version sepecified, need to give the version parameter
+"""
 import click
 import os
 import sys
@@ -37,6 +56,9 @@ def scan(directory, ignore):
 @click.option('-i', '--ignore', default=PREDEFINED_IGNORE_FOLDERS, help="""Ignore the folder or files through defined regrex expression, List[regrex]""")
 @click.option('-db', '--db_url', default='sqlite:///sqlbatis.db', help="""The database url config""")
 def init(directory, ignore, db_url):
+    """
+    Init the db tools
+    """
     alembic_cfg = Config('migrations/alembic.ini')
     script_location = os.path.join(current_work_dir, 'migrations')
     command.init(alembic_cfg, script_location)

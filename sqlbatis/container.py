@@ -14,7 +14,8 @@ def entity(cls):
 
 class SQLBatisMetaClass(type):
     """The mataclass which will register the current instance to the container
-    be careful: it will just host one instance in the container, the original instance
+
+    **be careful**: it will just host one instance in the container, the original instance
     will be replaced if a class instance is generated
     """
     def __call__(cls, *args, **kwargs):
