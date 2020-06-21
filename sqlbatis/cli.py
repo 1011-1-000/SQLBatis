@@ -11,7 +11,7 @@ current_work_dir = os.getcwd()
 sys.path.append(current_work_dir)
 
 PREDEFINED_IGNORE_FOLDERS = ['tests', 'build', 'vscode',
-                             'dist', 'egg-info', 'migrations', 'sqlbatis']
+                             'dist', 'egg', 'migrations', 'sqlbatis']
 
 
 @click.group()

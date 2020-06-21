@@ -26,7 +26,8 @@ clean-dist:
 	@find . -name '*.egg-info' -type d | xargs rm -fr
 
 clean-migrations:
-	@find . -name 'migrations' -type d | xargs rm -fr	
+	@find . -name 'migrations' -type d | xargs rm -fr
+	@find . -name '*.db' -delete	
 
 clean:clean-pyc clean-dist clean-migrations
 	@echo "## Clean all data."
