@@ -69,7 +69,9 @@ class Row:
         return str(table)
 
     def __getitem__(self, column):
-        """Get the conresponding value of the column
+        """Get the conresponding value of the column, becareful, in py3.5 the columns of the results 
+        will random generate, it's not reliable to use the index to get the value,
+        please use the column name to get the value if you not sure that is correct
 
         : param column: the column string or index
         : type column: str or int

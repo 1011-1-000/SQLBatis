@@ -55,7 +55,7 @@ def migrate():
 def upgrade(version):
     """Upgrade the db to the version specified, if not sepecified will update to the latest version
     """
-    os.system(f'alembic -c migrations/alembic.ini upgrade {version}')
+    os.system('alembic -c migrations/alembic.ini upgrade {}'.format(version))
 
 
 @db.command()
@@ -63,7 +63,7 @@ def upgrade(version):
 def downgrade(version):
     """Downgrade the db to the version sepecified, need to give the version parameter
     """
-    os.system(f'alembic -c migrations/alembic.ini downgrade {version}')
+    os.system('alembic -c migrations/alembic.ini downgrade {}'.format(version))
 
 
 def _update_alembic_config_file(directory, ignore, database_url):
@@ -93,9 +93,9 @@ def _update_alembic_config_file(directory, ignore, database_url):
     alembic_ini = Template(filename=alembic_ini_template).render(
         script_location=script_location, database_url=database_url
     )
-    ignore_str = f"""['{"','".join(ignore)}']"""
-    directory_str = f"'{directory}'"
-    database_url_str = f"'{database_url}'"
+    ignore_str = """['{}']""".format("','".join(ignore))
+    directory_str = "'{}'".format(directory)
+    database_url_str = "'{}'".format(database_url)
     alembic_env = Template(filename=alembic_env_template).render(
         directory=directory_str, ignore=ignore_str, database_url=database_url_str
     )

@@ -75,10 +75,10 @@ class SQLBatisContainer:
             instance = getattr(SQLBatisContainer.__local__, key)
             if not instance:
                 raise ContainerException(
-                    f'There is no object bounded with the key {key}')
+                    'There is no object bounded with the key {}'.format(key))
             return instance
         except Exception:
-            raise ContainerException(f'No {key} instance registered')
+            raise ContainerException('No {} instance registered'.format(key))
 
     @staticmethod
     def has_key(key):
