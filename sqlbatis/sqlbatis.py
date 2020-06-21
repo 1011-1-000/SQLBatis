@@ -39,6 +39,7 @@ class SQLBatis(metaclass=SQLBatisMetaClass):
         :return: return a connection for query
         :rtype: Connection
         """
+
         if connections.top:
             return connections.top
         else:
@@ -105,7 +106,24 @@ class SQLBatis(metaclass=SQLBatisMetaClass):
         return db_query
 
     def transactional(self):
-        pass
+
+        def _transactional(func):
+            @wraps(func)
+            def wrapper(*args, **kwargs):
+                try:
+                    transaction = self.get_connection().begin()
+                    results = func(*args, **kwargs)
+                    transaction.commit()
+                    return results
+                except Exception as e:
+                    transaction.rollback()
+                finally:
+                    transaction.close()
+                    if not self.get_connection.in_transaction():
+                        self.get_connection.close()
+
+            return wrapper
+        return _transactional
 
     def __enter__(self):
         return self

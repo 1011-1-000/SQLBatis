@@ -87,6 +87,9 @@ class Connection:
         """
         return self.conn.begin()
 
+    def begin_nested(self):
+        return self.conn.begin_nested()
+
     def _result_proxy_to_rowset(self, result_proxy, fetch_all):
         """Convert the ResultProxy object of the query result RowSet which defined in the
         SQLBatis
