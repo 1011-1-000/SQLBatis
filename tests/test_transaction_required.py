@@ -21,5 +21,31 @@ class PropagationTestCase(BasicTestCase):
         assert result == 0
 
 
+@db.transactional()
+def transaction_outer_for_inner_exception():
+    create(user)
+    create(user)
+    transaction_inner_for_inner_exception()
+
+
+@db.transactional()
+def transaction_inner_for_inner_exception():
+    create(user)
+    raise Exception('transaction error')
+
+
+@db.transactional()
+def transaction_outer_for_outer_exception():
+    create(user)
+    transaction_inner_for_outer_exception()
+    raise Exception('transaction error')
+    create(user)
+
+
+@db.transactional()
+def transaction_inner_for_outer_exception():
+    create(user)
+
+
 if __name__ == '__main__':
     unittest.main()

@@ -5,6 +5,7 @@ from ._internals import _parse_signature, _parse_signature_for_bulk_query
 from .errors import ConnectionException, QueryException, TransactionException
 from .connection import Connection
 from .container import SQLBatisMetaClass, entity, SQLBatisContainer
+from .page_query_builder import PageQueryBuilder
 
 
 @entity
@@ -91,7 +92,7 @@ class SQLBatis(metaclass=SQLBatisMetaClass):
         :param sql: the raw sql that you want to execute
         :type sql: str
         """
-        def db_query(func):
+        def db_bulk_query(func):
             @wraps(func)
             def wrapper(*args, **kwargs):
                 try:
@@ -106,7 +107,28 @@ class SQLBatis(metaclass=SQLBatisMetaClass):
 
             return wrapper
 
-        return db_query
+        return db_bulk_query
+
+    def query_by_page(self, sql, page=1, page_size=10, fetch_all=True):
+
+        def db_query_by_page(func):
+            @wraps(func)
+            def wrapper(*args, **kwargs):
+
+                # assemble the arguments
+                try:
+                    parameters = _parse_signature(func, *args, **kwargs)
+                    page_query_builder = PageQueryBuilder(
+                        sql, parameters, page, page_size, fetch_all)
+                    results = page_query_builder.query()
+                    return results
+                except Exception as e:
+                    raise QueryException(
+                        'Query Exception in func [{}]'.format(func.__name__)) from e
+
+            return wrapper
+
+        return db_query_by_page
 
     def transactional(self):
         """The decorator that for do the transaction, the useage of this is:
