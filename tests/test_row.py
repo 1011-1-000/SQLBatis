@@ -12,8 +12,6 @@ class RowTestCase(BasicTestCase):
         result = select().first()
         assert result.name == 'leo1'
         assert result.get('name') == 'leo1'
-        assert result.get(1) == 'leo1'
-        assert result[1] == 'leo1'
 
 
 if __name__ == '__main__':

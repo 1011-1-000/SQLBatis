@@ -14,7 +14,8 @@ def entity(cls):
 
 class SQLBatisMetaClass(type):
     """The mataclass which will register the current instance to the container
-    be careful: it will just host one instance in the container, the original instance
+
+    **be careful**: it will just host one instance in the container, the original instance
     will be replaced if a class instance is generated
     """
     def __call__(cls, *args, **kwargs):
@@ -75,10 +76,10 @@ class SQLBatisContainer:
             instance = getattr(SQLBatisContainer.__local__, key)
             if not instance:
                 raise ContainerException(
-                    f'There is no object bounded with the key {key}')
+                    'There is no object bounded with the key {}'.format(key))
             return instance
         except Exception:
-            raise ContainerException(f'No {key} instance registered')
+            raise ContainerException('No {} instance registered'.format(key))
 
     @staticmethod
     def has_key(key):

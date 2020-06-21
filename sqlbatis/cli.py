@@ -1,3 +1,22 @@
+"""
+Provide the cli to interact with DB through command-line
+
+Usage: sqlbatis [OPTIONS] COMMAND [ARGS]...
+
+Options:
+  --help  Show this message and exit.
+
+Commands:
+  **scan**       Show all the models that searched in the directory
+
+  **init**       Init the db tools
+
+  **migrate**    Generate the migrate script
+
+  **upgrade**    Upgrade the db to the version specified, if not sepecified will update to the latest version
+  
+  **downgrade**: Downgrade the db to the version sepecified, need to give the version parameter
+"""
 import click
 import os
 import sys
@@ -11,7 +30,7 @@ current_work_dir = os.getcwd()
 sys.path.append(current_work_dir)
 
 PREDEFINED_IGNORE_FOLDERS = ['tests', 'build', 'vscode',
-                             'dist', 'egg-info', 'migrations', 'sqlbatis']
+                             'dist', 'egg', 'migrations', 'sqlbatis']
 
 
 @click.group()
@@ -37,6 +56,9 @@ def scan(directory, ignore):
 @click.option('-i', '--ignore', default=PREDEFINED_IGNORE_FOLDERS, help="""Ignore the folder or files through defined regrex expression, List[regrex]""")
 @click.option('-db', '--db_url', default='sqlite:///sqlbatis.db', help="""The database url config""")
 def init(directory, ignore, db_url):
+    """
+    Init the db tools
+    """
     alembic_cfg = Config('migrations/alembic.ini')
     script_location = os.path.join(current_work_dir, 'migrations')
     command.init(alembic_cfg, script_location)
@@ -55,7 +77,7 @@ def migrate():
 def upgrade(version):
     """Upgrade the db to the version specified, if not sepecified will update to the latest version
     """
-    os.system(f'alembic -c migrations/alembic.ini upgrade {version}')
+    os.system('alembic -c migrations/alembic.ini upgrade {}'.format(version))
 
 
 @db.command()
@@ -63,7 +85,7 @@ def upgrade(version):
 def downgrade(version):
     """Downgrade the db to the version sepecified, need to give the version parameter
     """
-    os.system(f'alembic -c migrations/alembic.ini downgrade {version}')
+    os.system('alembic -c migrations/alembic.ini downgrade {}'.format(version))
 
 
 def _update_alembic_config_file(directory, ignore, database_url):
@@ -93,9 +115,9 @@ def _update_alembic_config_file(directory, ignore, database_url):
     alembic_ini = Template(filename=alembic_ini_template).render(
         script_location=script_location, database_url=database_url
     )
-    ignore_str = f"""['{"','".join(ignore)}']"""
-    directory_str = f"'{directory}'"
-    database_url_str = f"'{database_url}'"
+    ignore_str = """['{}']""".format("','".join(ignore))
+    directory_str = "'{}'".format(directory)
+    database_url_str = "'{}'".format(database_url)
     alembic_env = Template(filename=alembic_env_template).render(
         directory=directory_str, ignore=ignore_str, database_url=database_url_str
     )

@@ -24,7 +24,7 @@ class SQLBatisDao(metaclass=SQLBatisMetaClass):
         table_name = self._get_table_name()
         if table_name not in tables:
             raise TableMissingException(
-                f'No {table_name} in the db')
+                'No {} in the db'.format(table_name))
         return tables.get(table_name)
 
     def create(self, attrs):

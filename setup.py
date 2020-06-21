@@ -46,7 +46,7 @@ class PublishCommand(Command):
 
 setup(
     name='sqlbatis',
-    version='0.1.4',
+    version='0.2.0',
     author='Leo',
     author_email='leo.anonymous@qq.com',
     long_description=long_description,
@@ -55,11 +55,11 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     install_requires=[
-        'Click',
-        'sqlalchemy',
-        'alembic',
-        'werkzeug',
-        'prettytable'
+        'Click>=6.7',
+        'sqlalchemy>=1.1.13',
+        'alembic>=1.4.2',
+        'werkzeug>=0.12.2',
+        'prettytable>=0.7.2'
     ],
     entry_points='''
         [console_scripts]

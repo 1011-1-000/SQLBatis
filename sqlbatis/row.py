@@ -10,10 +10,10 @@ class Row:
     def __init__(self, columns, values):
         """Initialize the row with the sqlalchemy result
 
-        : param columns: columns in the result
-        : type columns: list
-        : param values: values in the result
-        : type values: list
+        :param columns: columns in the result
+        :type columns: list
+        :param values: values in the result
+        :type values: list
         """
 
         # check the number of the columns equal with the number of values
@@ -24,28 +24,28 @@ class Row:
     def columns(self):
         """Columns of result
 
-        : return: all columns
-        : rtype: list
+        :return: all columns
+        :rtype: list
         """
         return self._columns
 
     def values(self):
         """Values of result
 
-        : return: values conrespond to the columns
-        : rtype: list
+        :return: values conrespond to the columns
+        :rtype: list
         """
         return self._values
 
     def get(self, column, default=None):
         """Get the value by the column
 
-        : param column: the column
-        : type column: str
-        : param default: default value if the column not exist, defaults to None
-        : type default: any, optional
-        : return: the value conresponding to column
-        : rtype: any
+        :param column: the column
+        :type column: str
+        :param default: default value if the column not exist, defaults to None
+        :type default: any, optional
+        :return: the value conresponding to column
+        :rtype: any
         """
         try:
             return self[column]
@@ -55,10 +55,10 @@ class Row:
     def to_dict(self, ordered=False):
         """Return the row as a dictionary, if ordered is True, return an ordereddict
 
-        : param ordered: if need keep order or not, defaults to False
-        : type ordered: bool, optional
-        : return: the row dictionary
-        : rtype: dict
+        :param ordered: if need keep order or not, defaults to False
+        :type ordered: bool, optional
+        :return: the row dictionary
+        :rtype: dict
         """
         items = zip(self._columns(), self.values())
         return OrderedDict(items) if ordered else dict(items)
@@ -69,14 +69,16 @@ class Row:
         return str(table)
 
     def __getitem__(self, column):
-        """Get the conresponding value of the column
+        """Get the conresponding value of the column, becareful, in py3.5 the columns of the results 
+        will random generate, it's not reliable to use the index to get the value,
+        please use the column name to get the value if you not sure that is correct
 
-        : param column: the column string or index
-        : type column: str or int
-        : raises IndexError: if the index out of the range
-        : raises KeyError: column string is not contained in the row
-        : return: value conresonding to the column
-        : rtype: any
+        :param column: the column string or index
+        :type column: str or int
+        :raises IndexError: if the index out of the range
+        :raises KeyError: column string is not contained in the row
+        :return: value conresonding to the column
+        :rtype: any
         """
         # get the value by the index
         if isinstance(column, int):

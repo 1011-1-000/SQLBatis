@@ -5,9 +5,6 @@ from .utils import camel_to_snake_case
 class Model:
     """Basic Model in the SQLBatis, all the defined model should inherit this class,
     it will automaticlly interact with SQLAlchemy Core functions:
-
-    1. Create the table in the database
-
     """
 
     @classmethod

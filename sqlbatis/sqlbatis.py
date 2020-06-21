@@ -52,11 +52,11 @@ class SQLBatis(metaclass=SQLBatisMetaClass):
             return local.connection
 
     def query(self, sql, fetch_all=False):
-        """The decorator that using for the raw sql query, the simple example for usage is like:
+        """The decorator that using for the raw sql query, the simple example for usage is like::
 
-        @db.query("SELECT * FROM user")
-        def get_users():
-            pass
+            @db.query("SELECT * FROM user")
+            def get_users():
+                pass
 
         then if we try to call the function get_users, the sqlbatis will execute the query
         automatically.
@@ -110,7 +110,17 @@ class SQLBatis(metaclass=SQLBatisMetaClass):
         return db_bulk_query
 
     def query_by_page(self, sql, page=1, page_size=10, fetch_all=True):
+        """Get the rows by page number and page size
 
+        :param sql: The raw SQL that you want to execute
+        :type sql: str
+        :param page: page number, defaults to 1
+        :type page: int, optional
+        :param page_size: number of rows per page, defaults to 10
+        :type page_size: int, optional
+        :param fetch_all: ignore lazy loading or not, defaults to True
+        :type fetch_all: bool, optional
+        """
         def db_query_by_page(func):
             @wraps(func)
             def wrapper(*args, **kwargs):
@@ -131,24 +141,25 @@ class SQLBatis(metaclass=SQLBatisMetaClass):
         return db_query_by_page
 
     def transactional(self):
-        """The decorator that for do the transaction, the useage of this is:
+        """The decorator that for do the transaction, the useage of this is::
 
-        @db.transactional()
-        def transaction_needed_func():
-            do(1)
-            do(2)
+            @db.transactional()
+            def transaction_needed_func():
+                do(1)
+                do(2)
 
-        any error occurred, the changes will be rolled back
+        any error occurred, the changes will be rolled back.
 
-        also include the nested transaction, consider the scenario like this:
-        @db.transactional():
-        def transaction_func_1():
-            do(1)
-            transaction_func_2()
+        also include the nested transaction, consider the scenario like this::
 
-        @db.transactional()
-        def transaction_func_2():
-            do(2) 
+            @db.transactional():
+            def transaction_func_1():
+                do(1)
+                transaction_func_2()
+
+            @db.transactional()
+            def transaction_func_2():
+                do(2) 
 
         if the transaction_func_2 is failed, the result of the do(1) also will rolled back
         """
