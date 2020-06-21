@@ -1,6 +1,6 @@
 from sqlalchemy import text
 from .row import Row, RowSet
-from .container import local
+from .container import SQLBatisContainer
 
 
 class Connection:
@@ -13,6 +13,7 @@ class Connection:
     def close(self):
         """Close the connection
         """
+        local = SQLBatisContainer.__local__
         self.conn.close()
         del local.connection
 

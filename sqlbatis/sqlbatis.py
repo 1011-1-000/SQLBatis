@@ -4,7 +4,7 @@ from functools import wraps
 from ._internals import _parse_signature, _parse_signature_for_bulk_query
 from .errors import ConnectionException, QueryException
 from .connection import Connection
-from .container import SQLBatisMetaClass, entity, local
+from .container import SQLBatisMetaClass, entity, SQLBatisContainer
 
 
 @entity
@@ -39,6 +39,7 @@ class SQLBatis(metaclass=SQLBatisMetaClass):
         :return: return a connection for query
         :rtype: Connection
         """
+        local = SQLBatisContainer.__local__
 
         if hasattr(local, 'connection'):
             return local.connection
