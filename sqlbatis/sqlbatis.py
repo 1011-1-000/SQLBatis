@@ -2,7 +2,7 @@ from sqlalchemy import *
 from functools import wraps
 
 from ._internals import _parse_signature, _parse_signature_for_bulk_query
-from .errors import ConnectionException, QueryException
+from .errors import ConnectionException, QueryException, TransactionException
 from .connection import Connection
 from .container import SQLBatisMetaClass, entity, SQLBatisContainer
 
@@ -50,23 +50,6 @@ class SQLBatis(metaclass=SQLBatisMetaClass):
             local.connection = Connection(conn)
             return local.connection
 
-    def get_connection_v1(self):
-        """The function to get the connection, all the connections are in the localstack object
-
-        :raises ConnectionException: if the engine is closed, the connection will be created
-        :return: return a connection for query
-        :rtype: Connection
-        """
-
-        if connections.top:
-            return connections.top
-        else:
-            if not self.open:
-                raise ConnectionException('Database connection closed')
-            conn = self.engine.connect()
-            connections.push(Connection(conn))
-            return connections.top
-
     def query(self, sql, fetch_all=False):
         """The decorator that using for the raw sql query, the simple example for usage is like:
 
@@ -92,8 +75,9 @@ class SQLBatis(metaclass=SQLBatisMetaClass):
                     with self.get_connection() as conn:
                         results = conn.query(sql, fetch_all, **parameters)
                         return results
-                except Exception:
-                    raise QueryException('Error querying database')
+                except Exception as e:
+                    raise QueryException(
+                        'Query Exception in func [{}]'.format(func.__name__)) from e
 
             return wrapper
 
@@ -116,14 +100,36 @@ class SQLBatis(metaclass=SQLBatisMetaClass):
                     with self.get_connection() as conn:
                         results = conn.bulk_query(sql, *parameters)
                         return results
-                except Exception:
-                    raise Exception('Error querying database')
+                except Exception as e:
+                    raise QueryException(
+                        'Query Exception in func [{}]'.format(func.__name__)) from e
 
             return wrapper
 
         return db_query
 
     def transactional(self):
+        """The decorator that for do the transaction, the useage of this is:
+
+        @db.transactional()
+        def transaction_needed_func():
+            do(1)
+            do(2)
+
+        any error occurred, the changes will be rolled back
+
+        also include the nested transaction, consider the scenario like this:
+        @db.transactional():
+        def transaction_func_1():
+            do(1)
+            transaction_func_2()
+
+        @db.transactional()
+        def transaction_func_2():
+            do(2) 
+
+        if the transaction_func_2 is failed, the result of the do(1) also will rolled back
+        """
 
         def _transactional(func):
             @wraps(func)
@@ -133,7 +139,8 @@ class SQLBatis(metaclass=SQLBatisMetaClass):
                         results = func(*args, **kwargs)
                         return results
                 except Exception as e:
-                    raise Exception('Transaction Error')
+                    raise TransactionException(
+                        'Transaction Exception in func [{}]'.format(func.__name__)) from e
 
             return wrapper
         return _transactional

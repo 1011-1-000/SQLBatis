@@ -24,3 +24,7 @@ class PropagationException(SQLBatisException):
 
 class ContainerException(SQLBatisException):
     pass
+
+
+class TransactionException(SQLBatisException):
+    pass

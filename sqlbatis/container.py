@@ -3,6 +3,11 @@ from werkzeug.local import Local
 
 
 def entity(cls):
+    """Hand over the instance management to the container
+
+    :return: cls object
+    :rtype: SQLBatisMetaClass class
+    """
     SQLBatisContainer.register(cls.__name__, None)
     return cls
 
