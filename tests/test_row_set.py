@@ -11,7 +11,6 @@ class RowSetTestCase(BasicTestCase):
 
     def test_row_set_1_is_empty(self):
         results = select()
-        print(results)
         assert results.is_empty == True
 
     def test_row_set_2_get_attr(self):

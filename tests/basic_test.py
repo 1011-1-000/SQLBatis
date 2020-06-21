@@ -1,6 +1,6 @@
 import unittest
 
-from sqlbatis import Column, Integer, String
+from sqlalchemy import Column, Integer, String
 from sqlbatis.sqlbatis import SQLBatis
 from sqlbatis.model import Model
 
@@ -12,7 +12,7 @@ class User(Model):
     full_name = Column(String)
 
 
-db = SQLBatis('sqlite:///tests/sqlbatis.db')
+db = SQLBatis('sqlite:///:memory:')
 User._create_table_instance(db.metadata)
 
 
