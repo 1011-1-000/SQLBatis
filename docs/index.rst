@@ -4,8 +4,14 @@
    contain the root `toctree` directive.
 
 SQLBatis
-=============
-Welcome to SQLBatis
+========
+SQLBatis provides an easier way to interact with the database through the raw sql.
+
+Requirements
+------------
+
+-   `SQLAlchemy-Core <https://docs.sqlalchemy.org/en/13/core/tutorial.html>`_
+-   `Alembic <https://alembic.sqlalchemy.org/>`_
 
 
 Installation
@@ -23,14 +29,16 @@ Tutorial
    query
    transaction
    dao
-    
 
-API Reference
+
+
+Reference
 -------------
 .. toctree::
    :maxdepth: 4
 
    sqlbatis
+   DOI 
 
 ChangeLog
 ---------
