@@ -55,12 +55,12 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     install_requires=[
+        'MarkupSafe==1.0',
         'Click>=6.7',
         'sqlalchemy>=1.1.13',
         'alembic>=1.4.2',
         'werkzeug>=0.12.2',
-        'prettytable>=0.7.2',
-        'MarkupSafe==1.0'
+        'prettytable>=0.7.2'
     ],
     entry_points='''
         [console_scripts]
