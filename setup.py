@@ -59,7 +59,8 @@ setup(
         'sqlalchemy>=1.1.13',
         'alembic>=1.4.2',
         'werkzeug>=0.12.2',
-        'prettytable>=0.7.2'
+        'prettytable>=0.7.2',
+        'MarkupSafe==1.0'
     ],
     entry_points='''
         [console_scripts]
