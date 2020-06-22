@@ -4,6 +4,14 @@ from .container import SQLBatisMetaClass
 
 class PageResults:
     """The class that contain results of the each page
+
+    :attr:`page`: current page number
+
+    :attr:`page_size`: number of the object per page
+
+    :attr:`total`: total number of query objects
+
+    :attr:`results`: the result by page, it is a RowSet object
     """
 
     def __init__(self, page, page_size, total, results):
