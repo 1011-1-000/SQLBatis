@@ -14,7 +14,7 @@ to get more details about `sqlbatis`
 
 Define a Model
 --------------
-SQLBatis also can mapping the model to the table in the database, but there are some rules that we need to follow,
+SQLBatis can mapping the model to the table in the database, but there are some rules that we need to follow,
 Let's define a Model first::
 
     from sqlalchemy import Column, Integer, String
@@ -26,9 +26,9 @@ Let's define a Model first::
         name = Column(String)
         full_name = Column(String)    
 
-All the Models should inherit from sqlbatis.Model, so we can find all the models that you defined
-in the app. When we mapping the class to the table, we will convert the class name to camel case, 
-and use it as table name.But if `__tablename__` is specified we will use it instead of the camel case::
+All the Models should inherit from :class:`sqlbatis.model.Model`, so we can find all the models that you defined
+in the app, and create them in your database. We will convert the class name to camel case when we mapping the 
+class to the table, and use it as table name.But if `__tablename__` is specified we will use it instead of the camel case::
 
     from sqlalchemy import Column, Integer, String
     from sqlbatis import Model
