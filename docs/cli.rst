@@ -75,7 +75,7 @@ Once you confirmed the models that you defined, just use the command::
 
     sqlbatis init
 
-to generate the initial configuration file which will be used in migrate and upgrade stage. the usage of this::
+to generate the initial configuration files which will be used in migrate and upgrade stage. the usage of this::
 
     Usage: sqlbatis init [OPTIONS]
 
