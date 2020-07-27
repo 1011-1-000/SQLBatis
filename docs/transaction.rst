@@ -1,6 +1,6 @@
 Execute the Query in a transaction
 ==================================
-:method: `sqlbatis.sqlbatis.transactional` is a decorator which help you to do the query in a transaction.::
+:method: `sqlbatis.sqlbatis.transactional` is a decorator which help you to do the query in a transaction::
 
     @db.transactional()
     def query_in_transaction():
