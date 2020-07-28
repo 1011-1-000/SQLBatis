@@ -19,3 +19,6 @@ Installation
 Install SQLBatis with command `pip`::
 
     pip install sqlbatis
+    
+Documentation
+-------------
