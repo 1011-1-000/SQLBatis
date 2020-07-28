@@ -1,8 +1,3 @@
-.. SQLBatis documentation master file, created by
-   sphinx-quickstart on Sat Oct  5 20:25:42 2019.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 SQLBatis
 ========
 SQLBatis provides an easier way to interact with the database through the raw sql.
@@ -10,8 +5,8 @@ SQLBatis provides an easier way to interact with the database through the raw sq
 Requirements
 ------------
 
--   `SQLAlchemy-Core <https://docs.sqlalchemy.org/en/13/core/tutorial.html>`_
--   `Alembic <https://alembic.sqlalchemy.org/>`_
+-   [SQLAlchemy-Core](https://docs.sqlalchemy.org/en/13/core/tutorial.html)
+-   [Alembic](https://alembic.sqlalchemy.org/)
 
 
 Installation
