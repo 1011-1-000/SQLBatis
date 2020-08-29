@@ -6,6 +6,7 @@ sqlbatis.cli
 -------------------
 
 .. automodule:: sqlbatis.cli
+    .. autofunction:: scan
     :members:
     :undoc-members:
     :show-inheritance:
