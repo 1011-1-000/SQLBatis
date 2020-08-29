@@ -1,6 +1,12 @@
 ## SQLBatis
 
-(Under documentation)
+![License](https://img.shields.io/github/license/1011-1-000/SQLBatis?style=flat-square)
+![PyPI - Python Version](https://img.shields.io/badge/Python-3.6%20%7C%203.7%20%7C%203.8-blue?style=flat-square)
+![Build Status](https://img.shields.io/badge/build-passing-brightgreen?style=flat-square)
+[![DOC](https://img.shields.io/badge/SQLBatis-doc-orange?style=flat-square)](https://sqlbatis.readthedocs.io/en/latest/index.html)
+
+**Under Documentation**
+
 SQLBatis is a tool that provides an easier way to interact with the database through the raw sql.
 
 SQLBatis allows you to migrate, update your database according to the data model you defined in your app.Also, there are several decorators and builtin functions which give you capbility to interact with your database.
@@ -27,7 +33,7 @@ from sqlbatis import SQLBatis
 db = SQLBatis('sqlite:///:memory:')
 ```
 
-We have provided the decorator @db.query - sqlbatis.sqlbatis.SQLBatis.query() to execute the raw sql, Hera are CRUD examples:
+We have provided the decorator **@db.query** to execute the raw sql, Here are CRUD examples:
 
 ```python
 from sqlalchemy import Column, Integer, String
