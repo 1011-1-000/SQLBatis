@@ -1,5 +1,9 @@
 ## SQLBatis
 
+![License](https://img.shields.io/github/license/1011-1-000/SQLBatis?style=flat-square)
+![PyPI - Python Version](https://img.shields.io/badge/Python-3.6%20%7C%203.7%20%7C%203.8-blue?style=flat-square)
+![Build Status](https://img.shields.io/badge/build-passing-brightgreen?style=flat-square)
+
 (Under documentation)
 SQLBatis is a tool that provides an easier way to interact with the database through the raw sql.
 
