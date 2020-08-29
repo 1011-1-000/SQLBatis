@@ -1,23 +1,24 @@
-### SQLBatis
+## SQLBatis
 
+(Under documentation)
 SQLBatis is a tool that provides an easier way to interact with the database through the raw sql.
 
 SQLBatis allows you to migrate, update your database according to the data model you defined in your app.Also, there are several decorators and builtin functions which give you capbility to interact with your database.
 
 Let's try it.
 
-#### Requirements
+### Requirements
 
 -   [SQLAlchemy-Core](https://docs.sqlalchemy.org/en/13/core/tutorial.html)
 -   [Alembic](https://alembic.sqlalchemy.org/)
 
 
-#### Installation
+### Installation
 Install SQLBatis with command `pip`::
 
     pip install sqlbatis
 
-#### Quick Tutorial
+### Quick Tutorial
 
 Connect to the DB
 
@@ -60,7 +61,7 @@ if __name__ == '__main__':
     create('10111000', 'Leo')
 ```
 
-#### Documentation
+### Documentation
 
-More details please refer to the docs
+[More details please refer to the docs](https://sqlbatis.readthedocs.io/en/latest/index.html)
 
