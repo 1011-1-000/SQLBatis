@@ -1,8 +1,7 @@
 import unittest
 
 from sqlalchemy import Column, Integer, String
-from sqlbatis import SQLBatis
-from sqlbatis import Model
+from sqlbatis import SQLBatis, Model
 
 
 class User(Model):
