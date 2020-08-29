@@ -35,7 +35,7 @@ Tutorial
 Reference
 -------------
 .. toctree::
-   :maxdepth: 2 
+   :maxdepth: 4 
 
    api
    DOI 
