@@ -16,7 +16,8 @@ import os
 import sys
 sys.path.insert(0, os.path.abspath('..'))
 
-autodoc_mock_imports = ['sqlalchemy', 'prettytable']
+autodoc_mock_imports = ['sqlalchemy', 'MarkupSafe',
+                        'prettytable', 'werkzeug', 'Click', 'alembic']
 
 # def run_apidoc(_):
 #     from sphinx.apidoc import main
