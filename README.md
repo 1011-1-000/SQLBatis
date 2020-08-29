@@ -5,8 +5,8 @@
 ![Build Status](https://img.shields.io/badge/build-passing-brightgreen?style=flat-square)
 [![DOC](https://img.shields.io/badge/SQLBatis-doc-orange?style=flat-square)](https://sqlbatis.readthedocs.io/en/latest/index.html)
 
+**Under Documentation**
 
-(Under documentation)
 SQLBatis is a tool that provides an easier way to interact with the database through the raw sql.
 
 SQLBatis allows you to migrate, update your database according to the data model you defined in your app.Also, there are several decorators and builtin functions which give you capbility to interact with your database.
