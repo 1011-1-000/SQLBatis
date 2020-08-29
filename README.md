@@ -27,7 +27,7 @@ from sqlbatis import SQLBatis
 db = SQLBatis('sqlite:///:memory:')
 ```
 
-We have provided the decorator @db.query - sqlbatis.sqlbatis.SQLBatis.query() to execute the raw sql, Hera are CRUD examples:
+We have provided the decorator **@db.query** to execute the raw sql, Here are CRUD examples:
 
 ```python
 from sqlalchemy import Column, Integer, String
