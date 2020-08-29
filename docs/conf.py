@@ -53,7 +53,7 @@ release = '0.4.1'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    'sphinxcontrib.apidoc',
+    'sphinx.ext.apidoc',
     'sphinx.ext.autodoc',
     'sphinx.ext.doctest',
     "sphinx.ext.intersphinx",
