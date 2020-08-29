@@ -8,8 +8,8 @@ Let's try it.
 
 #### Requirements
 
--   `SQLAlchemy-Core <https://docs.sqlalchemy.org/en/13/core/tutorial.html>`_
--   `Alembic <https://alembic.sqlalchemy.org/>`_
+-   [SQLAlchemy-Core](https://docs.sqlalchemy.org/en/13/core/tutorial.html)
+-   [Alembic](https://alembic.sqlalchemy.org/)
 
 
 #### Installation
