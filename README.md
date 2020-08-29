@@ -1,24 +1,66 @@
-.. SQLBatis documentation master file, created by
-   sphinx-quickstart on Sat Oct  5 20:25:42 2019.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+### SQLBatis
 
-SQLBatis
-========
-SQLBatis provides an easier way to interact with the database through the raw sql.
+SQLBatis is a tool that provides an easier way to interact with the database through the raw sql.
 
-Requirements
-------------
+SQLBatis allows you to migrate, update your database according to the data model you defined in your app.Also, there are several decorators and builtin functions which give you capbility to interact with your database.
 
--   `SQLAlchemy-Core <https://docs.sqlalchemy.org/en/13/core/tutorial.html>`_
--   `Alembic <https://alembic.sqlalchemy.org/>`_
+Let's try it.
+
+#### Requirements
+
+-   [SQLAlchemy-Core](https://docs.sqlalchemy.org/en/13/core/tutorial.html)
+-   [Alembic](https://alembic.sqlalchemy.org/)
 
 
-Installation
-------------
+#### Installation
 Install SQLBatis with command `pip`::
 
     pip install sqlbatis
-    
-Documentation
--------------
+
+#### Quick Tutorial
+
+Connect to the DB
+
+```python
+from sqlbatis import SQLBatis
+db = SQLBatis('sqlite:///:memory:')
+```
+
+We have provided the decorator @db.query - sqlbatis.sqlbatis.SQLBatis.query() to execute the raw sql, Hera are CRUD examples:
+
+```python
+from sqlalchemy import Column, Integer, String
+from sqlbatis import SQLBatis, Model
+db = SQLBatis('sqlite:///:memory:')
+
+class User(Model):
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+    full_name = Column(String)
+
+
+@db.query('INSERT INTO user (name, full_name) VALUS(:name, :full_name)')
+def create(name, full_name):
+    pass
+
+@db.query('SELECT * FROM user')
+def query_user():
+    pass
+
+@db.query('UPDATE user SET name = :name WHERE id = :id')
+def update_user(name, id):
+    pass
+
+@db.query('DELETE FROM user WHERE id = :id')
+def delete_user(id):
+    pass
+
+if __name__ == '__main__':
+    create('10111000', 'Leo')
+```
+
+#### Documentation
+
+More details please refer to the docs
+
