@@ -14,7 +14,7 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath('.'))
+sys.path.insert(0, os.path.abspath('..'))
 
 
 # -- Project information -----------------------------------------------------
@@ -24,9 +24,9 @@ copyright = '2019, 10111000'
 author = '10111000'
 
 # The short X.Y version
-version = '0.2'
+version = '0.4'
 # The full version, including alpha/beta/rc tags
-release = '0.2.0'
+release = '0.4.1'
 
 
 # -- General configuration ---------------------------------------------------
@@ -39,6 +39,7 @@ release = '0.2.0'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    'sphinx.ext.apidoc',
     'sphinx.ext.autodoc',
     'sphinx.ext.doctest',
     "sphinx.ext.intersphinx",

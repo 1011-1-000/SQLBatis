@@ -37,7 +37,7 @@ Reference
 .. toctree::
    :maxdepth: 2 
 
-   sqlbatis
+   api
    DOI 
 
 ChangeLog

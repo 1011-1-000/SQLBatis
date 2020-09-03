@@ -29,6 +29,8 @@ from alembic import command
 current_work_dir = os.getcwd()
 sys.path.append(current_work_dir)
 
+lib_dir = os.path.abspath(os.path.dirname(__file__))
+
 PREDEFINED_IGNORE_FOLDERS = ['tests', 'build', 'vscode',
                              'dist', 'egg', 'migrations', 'sqlbatis']
 
@@ -107,7 +109,7 @@ def _update_alembic_config_file(directory, ignore, database_url):
     """
     script_location = os.path.join(current_work_dir, 'migrations')
     alembic_config_templates = os.path.join(
-        current_work_dir, 'sqlbatis/template')
+        lib_dir, 'template')
     alembic_ini_template = os.path.join(
         alembic_config_templates, 'alembic.ini.mako')
     alembic_env_template = os.path.join(
