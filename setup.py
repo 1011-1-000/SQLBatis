@@ -6,6 +6,7 @@ from shutil import rmtree
 
 here = os.path.abspath(os.path.dirname(__file__))
 
+
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
@@ -46,7 +47,7 @@ class PublishCommand(Command):
 
 setup(
     name='sqlbatis',
-    version='0.4.0',
+    version='0.4.1',
     author='Leo',
     author_email='leo.anonymous@qq.com',
     long_description=long_description,
