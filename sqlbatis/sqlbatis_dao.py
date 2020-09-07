@@ -1,3 +1,4 @@
+from sqlalchemy.sql import *
 from .utils import camel_to_snake_case
 from .errors import TableMissingException, PrimaryKeyMissingException
 from .container import SQLBatisMetaClass
@@ -59,7 +60,24 @@ class SQLBatisDao(metaclass=SQLBatisMetaClass):
         :rtype: RowSet
         """
         with self.SQLBatis.get_connection() as conn:
-            result = conn.execute(self.table.select()).all()
+            result = conn.execute(self.table.select())
+            return result
+
+    def filter_by(self, where_condition):
+        """Get the rows which match the given conditions, if where_condition is empty, will retrieve all rows
+        in the table
+
+        :param where_condition: conditions that we need to filter from the table
+        :type where_condition: dict
+        :return: rows which filtered by the conditions
+        :rtype: RowSet
+        """
+        query = self.table.select()
+        for key, value in where_condition.items():
+            query = query.where(getattr(self.table.c, key) == value)
+
+        with self.SQLBatis.get_connection() as conn:
+            result = conn.execute(query)
             return result
 
     def delete_by_id(self, _id):

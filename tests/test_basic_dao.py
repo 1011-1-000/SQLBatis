@@ -31,20 +31,20 @@ class BasicDaoTestCase(BasicTestCase):
     def test_3_retrieve_all(self):
         user_dao = UserDao()
         user_dao.create(user)
-        results = user_dao.retrieve_all()
+        results = user_dao.retrieve_all().all()
         assert len(results) == 2
 
     def test_4_delete_by_id(self):
         user_dao = UserDao()
         user_dao.delete_by_id(1)
-        results = user_dao.retrieve_all()
+        results = user_dao.retrieve_all().all()
         assert len(results) == 1
 
     def test_5_bulk_insert(self):
         user_dao = UserDao()
         r = user_dao.retrieve_all()
         user_dao.bulk_insert(users)
-        results = user_dao.retrieve_all()
+        results = user_dao.retrieve_all().all()
         assert len(results) == 3
 
 

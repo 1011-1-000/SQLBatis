@@ -15,8 +15,13 @@ class PageResults:
     """
 
     def __init__(self, page, page_size, total, results):
-        self.page = page
-        self.page_size = page_size
+        # check if the limit and offset are numbers
+        try:
+            self.page = int(page)
+            self.page_size = int(page_size)
+        except TypeError as err:
+            raise TypeError
+
         self.total = total
         self.results = results
 
@@ -112,6 +117,7 @@ class PageQueryBuilder(metaclass=SQLBatisMetaClass):
         """
         current_page_sql = '{} LIMIT {} OFFSET {}'.format(
             self.sql, self.limit, self.offset)
+
         with self.SQLBatis.get_connection() as conn:
             results = conn.query(
                 current_page_sql, self.fetch_all, **self.params)
