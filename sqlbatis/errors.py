@@ -32,3 +32,7 @@ class TransactionException(SQLBatisException):
 
 class SQLInjectionException(SQLBatisException):
     pass
+
+
+class NotSupportedException(SQLBatisException):
+    pass
