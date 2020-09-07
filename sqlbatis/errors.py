@@ -28,3 +28,7 @@ class ContainerException(SQLBatisException):
 
 class TransactionException(SQLBatisException):
     pass
+
+
+class SQLInjectionException(SQLBatisException):
+    pass
