@@ -12,7 +12,7 @@ class Model:
         """Retrieve all the columns that defined in the model class,
         which according to the rule that not start with the '_'
 
-        :return: A group that contain all the columns defined in the class 
+        :return: A group that contain all the columns defined in the class
         :rtype: list[SQLAlchemy Column]
         """
         columns = []
@@ -33,4 +33,7 @@ class Model:
         if not getattr(cls, '__tablename__', None):
             cls.__tablename__ = camel_to_snake_case(cls.__name__)
         columns = cls._get_columns()
+        table = metadata.tables.get(cls.__tablename__, None)
+        if table is not None:
+            metadata.remove(table)
         Table(cls.__tablename__, metadata, *columns)
