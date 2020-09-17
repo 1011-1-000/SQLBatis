@@ -60,7 +60,7 @@ class Row:
         :return: the row dictionary
         :rtype: dict
         """
-        items = zip(self._columns(), self.values())
+        items = zip(self.columns(), self.values())
         return OrderedDict(items) if ordered else dict(items)
 
     def __repr__(self):
@@ -168,7 +168,7 @@ class RowSet:
     def one(self, default=None, to_dict=False, to_ordered_dict=False):
         """Returns a single row for the RowSet or default value, also we will check
         there is only one row contained in the RowSet"""
-
+        self.all()
         assert len(self) == 1, 'Expects only one row contained'
         return self.first(default=default, to_dict=to_dict, to_ordered_dict=to_ordered_dict)
 

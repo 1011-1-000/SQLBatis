@@ -13,6 +13,12 @@ class RowTestCase(BasicTestCase):
         assert result.name == 'leo1'
         assert result.get('name') == 'leo1'
 
+    def test_row_3_to_dict(self):
+        result = select().first().to_dict()
+
+        assert isinstance(result, dict) == True
+        assert result['name'] == 'leo1'
+
 
 if __name__ == '__main__':
     unittest.main()

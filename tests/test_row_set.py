@@ -1,5 +1,6 @@
 from tests.basic_test import BasicTestCase, db
 from tests.crud import *
+from sqlbatis.row import Row
 
 
 @db.query(SELECT_USER_BY_NAME)
@@ -25,6 +26,9 @@ class RowSetTestCase(BasicTestCase):
         assert result == 2
 
     def test_row_set_4_one(self):
+        result = select_user_by_name('leo2').one()
+        assert isinstance(result, Row) == True
+
         create(user)
         create(user)
         try:
@@ -36,6 +40,21 @@ class RowSetTestCase(BasicTestCase):
     def test_row_set_5_all(self):
         results = select().all()
         assert len(results) == 4
+        assert isinstance(results, list) == True
+        assert isinstance(results[0], Row) == True
+
+    def test_row_set_6_to_dictionary(self):
+        results = select()
+        results = results.to_dict()
+
+        assert len(results) == 4
+        assert results[0]['name'] == 'leo2'
+        assert isinstance(results[0], dict) == True
+
+    def test_row_set_7_first(self):
+        result = select().first()
+
+        assert result.name == 'leo2'
 
 
 if __name__ == '__main__':
