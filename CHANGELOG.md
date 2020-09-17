@@ -1,4 +1,4 @@
 ### SQLBatis
 
-#### 2020-05-31
-#### 2020-06-01 
+#### 20200917
+- fix the bug that the row.to_dict(), 'list' object is not callable error
