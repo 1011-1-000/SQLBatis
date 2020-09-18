@@ -46,11 +46,12 @@ class SQLBatisDao(metaclass=SQLBatisMetaClass):
 
         :param _id: primary key of the row that you want to retrieve
         :type _id: int
-        :return: the row which id is _id 
-        :rtype: Row 
+        :return: the row which id is _id
+        :rtype: Row
         """
         with self.SQLBatis.get_connection() as conn:
-            result = conn.execute(self.table.select(), id=_id).first()
+            result = conn.execute(self.table.select().where(
+                self.table.c.id == _id)).first()
             return result
 
     def retrieve_all(self):
@@ -104,16 +105,18 @@ class SQLBatisDao(metaclass=SQLBatisMetaClass):
         """
         if 'id' not in attrs:
             raise PrimaryKeyMissingException('Primary key id is missing')
+        _id = attrs.pop('id')
         with self.SQLBatis.get_connection() as conn:
-            result = conn.execute(self.table.update().values(attrs))
+            result = conn.execute(
+                self.table.update().where(self.table.c.id == _id).values(attrs))
             return result
 
     def bulk_insert(self, attrs):
         """Bulk insert and update
 
         :param attrs: the list of the attributes dict
-        :type attrs: list[dict] 
-        :return: TBI 
+        :type attrs: list[dict]
+        :return: TBI
         :rtype: TBI
         """
         with self.SQLBatis.get_connection() as conn:

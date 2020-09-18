@@ -43,6 +43,10 @@ user = {
     'name': 'leo1'
 }
 
+extra_user = {
+    'name': 'libra'
+}
+
 users = [{
     'name': 'leo2'
 }, {
