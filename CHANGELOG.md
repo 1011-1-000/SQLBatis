@@ -5,3 +5,6 @@
 
 #### 20200918
 - fix bug #27, #28
+
+#### 20200922
+- give the error details when execute transaction

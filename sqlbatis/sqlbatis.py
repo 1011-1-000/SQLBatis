@@ -167,13 +167,9 @@ class SQLBatis(metaclass=SQLBatisMetaClass):
         def _transactional(func):
             @wraps(func)
             def wrapper(*args, **kwargs):
-                try:
-                    with self.get_connection().begin():
-                        results = func(*args, **kwargs)
-                        return results
-                except Exception as e:
-                    raise TransactionException(
-                        'Transaction Exception in func [{}]'.format(func.__name__)) from e
+                with self.get_connection().begin():
+                    results = func(*args, **kwargs)
+                    return results
 
             return wrapper
         return _transactional
