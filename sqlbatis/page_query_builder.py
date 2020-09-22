@@ -19,7 +19,7 @@ class PageResults:
         try:
             self.page = int(page)
             self.page_size = int(page_size)
-        except TypeError as err:
+        except TypeError:
             raise TypeError
 
         self.total = total
@@ -82,7 +82,7 @@ class PageQueryBuilder(metaclass=SQLBatisMetaClass):
             print(
                 '[WARNING]: page_size is less than 1, the system reset the page size to 10')
 
-        max_page = math.ceil(self.total/self.page_size)
+        max_page = math.ceil(self.total / self.page_size)
 
         if self.page < 1:
             self.page = 1

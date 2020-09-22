@@ -33,7 +33,7 @@ clean:clean-pyc clean-dist clean-migrations
 	@echo "## Clean all data."
 
 check:
-	flake8 --ignore=E501,W291,F405,F403 --exclude=tests,migrations,__init__.py
+	flake8 --ignore=E501,W291,F405,F403,W601 --exclude=tests,migrations,__init__.py,.eggs
 
 doc: 
 	cd docs; make html
