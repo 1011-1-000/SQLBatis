@@ -9,6 +9,14 @@ def transaction_test():
     create(user)
 
 
+@db.transactional()
+def transaction_test_file_not_found():
+    create(user)
+    with open('a.txt', 'r') as f:
+        r.read()
+    create(user)
+
+
 class TransactionTestCase(BasicTestCase):
 
     def test_1_transaction(self):
@@ -18,6 +26,10 @@ class TransactionTestCase(BasicTestCase):
             pass
         result = count().scalar()
         assert result == 0
+
+    def test_2_transaction_message(self):
+        self.assertRaises(FileNotFoundError, transaction_test_file_not_found)
+        # transaction_test_file_not_found()
 
 
 if __name__ == '__main__':

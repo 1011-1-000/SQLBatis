@@ -31,11 +31,8 @@ class RowSetTestCase(BasicTestCase):
 
         create(user)
         create(user)
-        try:
-            result = select_user_by_name('leo1')
-            result.one()
-        except AssertionError as e:
-            assert str(e) == 'Expects only one row contained'
+        result = select_user_by_name('leo1')
+        self.assertRaises(AssertionError, result.one)
 
     def test_row_set_5_all(self):
         results = select().all()

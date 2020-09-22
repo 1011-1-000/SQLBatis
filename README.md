@@ -70,4 +70,3 @@ if __name__ == '__main__':
 ### Documentation
 
 [More details please refer to the docs](https://sqlbatis.readthedocs.io/en/latest/index.html)
-
