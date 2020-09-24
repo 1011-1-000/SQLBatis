@@ -86,7 +86,7 @@ class ModelScanner(Scanner):
         # dynamic import the module
         self.exclude.append('setup.py')
 
-        self.models = []
+        self.models = {}
 
     def scan_models(self):
         """Scan all the sqlbatis models in the folder that user specified
@@ -103,9 +103,9 @@ class ModelScanner(Scanner):
         for file in relative_files:
             _module = '.'.join(file.split(os.sep)[1:])
             _models = self._get_model_class_in_the_module(_module)
-            self.models.extend(_models)
+            self.models.update(_models)
 
-        return self.models
+        return list(self.models.values())
 
     def _get_model_class_in_the_module(self, path):
         """Instaniate an module and find all the classes in the module,
@@ -118,7 +118,7 @@ class ModelScanner(Scanner):
         :return: SQLBatis Models
         :rtype: list
         """
-        sqlbatis_models = []
+        sqlbatis_models = {}
 
         # discard the suffix of the file
         module, _ = path.rsplit('.', maxsplit=1)
@@ -128,7 +128,7 @@ class ModelScanner(Scanner):
 
                 # abandon the orginal Model class defined in the SQLBatis
                 if not obj.__name__ == 'Model':
-                    sqlbatis_models.append(obj)
+                    sqlbatis_models[name] = obj
 
         return sqlbatis_models
 
