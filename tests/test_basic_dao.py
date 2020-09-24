@@ -24,8 +24,8 @@ class BasicDaoTestCase(BasicTestCase):
 
     def test_2_update(self):
         user_dao = UserDao()
-        user_dao.update_by_id(
-            {'id': 2, 'name': 'Huang', 'full_name': 'Leo.Huang'})
+        user_dao.update_by_id(2,
+                              {'name': 'Huang', 'full_name': 'Leo.Huang'})
         results = user_dao.retrieve_by_id(2)
         assert results.name == 'Huang'
         assert results.full_name == 'Leo.Huang'

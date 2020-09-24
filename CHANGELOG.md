@@ -8,3 +8,6 @@
 
 #### 20200922
 - give the error details when execute transaction
+
+#### 20200925
+- fix bug and enhancement #32 #33

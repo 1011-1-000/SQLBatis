@@ -94,18 +94,14 @@ class SQLBatisDao(metaclass=SQLBatisMetaClass):
                 self.table.delete().where(self.table.c.id == _id))
             return result
 
-    def update_by_id(self, attrs):
+    def update_by_id(self, _id, attrs):
         """Update the row in the database by the id and attrs
 
         :param attrs: the attributes of row and contained the primary key of the row
         :type attrs: dict
-        :raises PrimaryKeyMissingException: if not primary key is specified in the attrs
         :return: TBI
         :rtype: TBI
         """
-        if 'id' not in attrs:
-            raise PrimaryKeyMissingException('Primary key id is missing')
-        _id = attrs.pop('id')
         with self.SQLBatis.get_connection() as conn:
             result = conn.execute(
                 self.table.update().where(self.table.c.id == _id).values(attrs))
