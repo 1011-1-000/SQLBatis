@@ -18,7 +18,11 @@ class Row:
 
         # check the number of the columns equal with the number of values
         assert len(columns) == len(values)
-        self._columns = columns
+        # To compatible the 1.4+ version sqlalchemy, convert RMKeyView to list
+        if isinstance(columns, list):
+            self._columns = columns
+        else:
+            self._columns = list(columns)
         self._values = values
 
     def columns(self):

@@ -24,7 +24,8 @@ class SQLBatis(metaclass=SQLBatisMetaClass):
         self.open = True
 
         # will reflect the tables from the local database
-        self.metadata = MetaData(self.engine, reflect=True)
+        self.metadata = MetaData(self.engine)
+        self.metadata.reflect()
 
     def close(self):
         """Close the sqlbatis, which also mean close the engine of the sqlalchemy
@@ -167,10 +168,14 @@ class SQLBatis(metaclass=SQLBatisMetaClass):
         def _transactional(func):
             @wraps(func)
             def wrapper(*args, **kwargs):
-                with self.get_connection().begin():
-                    results = func(*args, **kwargs)
-                    return results
-
+                with self.get_connection().begin() as t:
+                    try:
+                        results = func(*args, **kwargs)
+                        return results
+                    except Exception as e:
+                        t.rollback()
+                        raise QueryException(
+                            'Query Exception in func [{}]'.format(func.__name__)) from e
             return wrapper
         return _transactional
 

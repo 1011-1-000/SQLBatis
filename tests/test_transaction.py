@@ -1,3 +1,5 @@
+from sqlbatis.errors import QueryException
+
 from tests.basic_test import BasicTestCase
 from tests.crud import *
 
@@ -28,7 +30,7 @@ class TransactionTestCase(BasicTestCase):
         assert result == 0
 
     def test_2_transaction_message(self):
-        self.assertRaises(FileNotFoundError, transaction_test_file_not_found)
+        self.assertRaises(QueryException, transaction_test_file_not_found)
         # transaction_test_file_not_found()
 
 
