@@ -11,3 +11,9 @@
 
 #### 20200925
 - fix bug and enhancement #32 #33
+
+#### 20210627
+- compatible the metadata changes(remove reflect param when init metadata)
+  in sqlalchemy
+- convert the RMKeyView object to list to compatible the 1.4+
+- solve the pending rollback issue when inner sql execution has the error

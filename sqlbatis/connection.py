@@ -9,6 +9,7 @@ class Connection:
 
     def __init__(self, conn):
         self.conn = conn
+        self.transaction = None
 
     def close(self):
         """Close the connection
@@ -84,7 +85,8 @@ class Connection:
         :return: a transaction
         :rtype: TBI
         """
-        return self.conn.begin()
+        self.transaction =  self.conn.begin()
+        return self.transaction
 
     def begin_nested(self):
         return self.conn.begin_nested()

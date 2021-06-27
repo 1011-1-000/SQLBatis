@@ -47,7 +47,7 @@ class PublishCommand(Command):
 
 setup(
     name='sqlbatis',
-    version='0.7.4',
+    version='0.8.0',
     author='Leo',
     author_email='leo.anonymous@qq.com',
     long_description=long_description,
