@@ -1,3 +1,5 @@
+import unittest
+
 from tests.basic_test import BasicTestCase, db
 from tests.crud import *
 
@@ -8,7 +10,7 @@ class BulkQueryTestCase(BasicTestCase):
 
         bulk_create(users)
         results = select()
-        assert len(results) == 2
+        self.assertEqual(len(results), 2)
 
 
 if __name__ == '__main__':

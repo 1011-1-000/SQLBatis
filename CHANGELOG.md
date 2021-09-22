@@ -1,5 +1,9 @@
 ### SQLBatis
 
+#### 20210922
+- fix the print issue when no records are fetched
+- add proxy to get the rowcount and inserted primary key
+
 #### 20200917
 - fix the bug that the row.to_dict(), 'list' object is not callable error
 

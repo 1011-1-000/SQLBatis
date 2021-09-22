@@ -1,3 +1,5 @@
+import unittest
+
 from tests.basic_test import BasicTestCase, db
 from tests.crud import *
 from sqlbatis.sqlbatis_dao import SQLBatisDao
@@ -37,11 +39,11 @@ class QueryOnClassTestCase(BasicTestCase):
 
     def test_2_class_select(self):
         user = UserDao().select().first()
-        assert user.name == 'leo'
+        self.assertEqual(user.name, 'leo')
 
     def test_2_static_select(self):
         user = UserDao.select().first()
-        assert user.name == 'leo'
+        self.assertEqual(user.name, 'leo')
 
 
 if __name__ == '__main__':
