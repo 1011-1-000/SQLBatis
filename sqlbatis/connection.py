@@ -1,5 +1,5 @@
 from sqlalchemy import text
-from .row import Row, RowSet
+from .row import Row, RowSet, SQLAlchemyResultProxy
 from .container import SQLBatisContainer
 
 
@@ -85,7 +85,7 @@ class Connection:
         :return: a transaction
         :rtype: TBI
         """
-        self.transaction =  self.conn.begin()
+        self.transaction = self.conn.begin()
         return self.transaction
 
     def begin_nested(self):
@@ -105,12 +105,12 @@ class Connection:
         if result_proxy.returns_rows:
             keys = result_proxy.keys()
             rows = (Row(keys, values) for values in result_proxy)
-            results = RowSet(rows)
+            results = RowSet(rows, SQLAlchemyResultProxy(result_proxy))
             if fetch_all:
                 results.all()
             return results
         else:
-            return RowSet([])
+            return RowSet(iter([]), SQLAlchemyResultProxy(result_proxy))
 
     def __enter__(self):
         return self

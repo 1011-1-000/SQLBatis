@@ -1,3 +1,5 @@
+import unittest
+
 from tests.basic_test import BasicTestCase, db
 from tests.crud import *
 
@@ -29,23 +31,23 @@ class QueryOnClassMethodTestCase(BasicTestCase):
         instance = QueryOnClassMethod()
         instance.instance(user)
         result = select().first()
-        assert result.name == 'leo1'
+        self.assertEqual(result.name, 'leo1')
 
     def test_2_static_method(self):
         QueryOnClassMethod.static_method(user)
         result = select().first()
-        assert result.name == 'leo1'
+        self.assertEqual(result.name, 'leo1')
 
     def test_3_bulk_instance(self):
         instance = QueryOnClassMethod()
         instance.bulk_query_instance(users)
         results = select()
-        assert len(results) == 4
+        self.assertEqual(len(results), 4)
 
     def test_4_bulk_static_method(self):
         QueryOnClassMethod.bulk_query_static_method(users)
         results = select()
-        assert len(results) == 6
+        self.assertEqual(len(results), 6)
 
 
 if __name__ == '__main__':

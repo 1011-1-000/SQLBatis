@@ -1,3 +1,5 @@
+import unittest
+
 from tests.basic_test import BasicTestCase, db
 from tests.crud import *
 
@@ -10,7 +12,7 @@ class PropagationTestCase(BasicTestCase):
         except Exception as e:
             pass
         result = count().scalar()
-        assert result == 0
+        self.assertEqual(result, 0)
 
     def test_2_required_outer(self):
         try:
@@ -18,7 +20,7 @@ class PropagationTestCase(BasicTestCase):
         except Exception as e:
             pass
         result = count().scalar()
-        assert result == 0
+        self.assertEqual(result, 0)
 
 
 @db.transactional()

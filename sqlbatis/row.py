@@ -2,6 +2,20 @@ from collections import OrderedDict
 from prettytable import PrettyTable
 
 
+class SQLAlchemyResultProxy:
+
+    def __init__(self, result_proxy):
+        self._proxy = result_proxy
+
+    @property
+    def rowcount(self):
+        return self._proxy.rowcount
+
+    @property
+    def inserted_primary_key(self):
+        return self._proxy.inserted_primary_key
+
+
 class Row:
     """Row objecct which constructed by the Result retrieved by sqlalchemy"""
 
@@ -114,12 +128,12 @@ class Row:
 
 
 class RowSet:
-
     """Rows collection"""
 
-    def __init__(self, rows):
+    def __init__(self, rows, result_proxy):
         self._rows = rows
         self._all_rows = []
+        self.proxy = result_proxy
         self.pending = True
 
     def columns(self):
@@ -151,7 +165,7 @@ class RowSet:
         return rows
 
     def to_dict(self, ordered=False):
-        return self.all(to_dict=not(ordered), to_ordered_dict=ordered)
+        return self.all(to_dict=not (ordered), to_ordered_dict=ordered)
 
     def first(self, default=None, to_dict=False, to_ordered_dict=False):
         """Return the first row in the rowset, and will return the default value if the

@@ -1,3 +1,5 @@
+import unittest
+
 from sqlbatis.errors import QueryException
 
 from tests.basic_test import BasicTestCase
@@ -27,6 +29,7 @@ class TransactionTestCase(BasicTestCase):
         except Exception as e:
             pass
         result = count().scalar()
+        self.assertEqual(result, 0)
         assert result == 0
 
     def test_2_transaction_message(self):

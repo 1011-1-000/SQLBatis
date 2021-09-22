@@ -1,3 +1,5 @@
+import unittest
+
 from tests.basic_test import BasicTestCase, db
 from tests.crud import *
 from sqlbatis.sqlbatis_dao import SQLBatisDao
@@ -38,15 +40,15 @@ class DynamicTestCase(BasicTestCase):
         user_dao.bulk_insert(users)
 
         results = select({'name': 'leo2'}).all()
-        assert len(results) == 2
-        assert results[0].name == 'leo2'
+        self.assertEqual(len(results), 2)
+        self.assertEqual(results[0].name, 'leo2')
 
         results = select({'name': 'leo2', 'id': 1}).all()
-        assert len(results) == 1
-        assert results[0].name == 'leo2'
+        self.assertEqual(len(results), 1)
+        self.assertEqual(results[0].name, 'leo2')
 
         results = select({'name': 'leo2', 'id': 2}, 'or').all()
-        assert len(results) == 3
+        self.assertEqual(len(results), 3)
 
 
 if __name__ == '__main__':
