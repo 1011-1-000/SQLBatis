@@ -115,9 +115,12 @@ class SQLBatisDao(metaclass=SQLBatisMetaClass):
         :return: TBI
         :rtype: TBI
         """
-        with self.SQLBatis.get_connection() as conn:
-            result = conn.execute(self.table.insert().values(attrs))
-            return result
+        if len(attrs) > 0:
+            with self.SQLBatis.get_connection() as conn:
+                result = conn.execute(self.table.insert().values(attrs))
+                return result
+
+        return None
 
     def _get_table_name(self):
         """
