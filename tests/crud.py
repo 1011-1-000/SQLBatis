@@ -53,4 +53,6 @@ users = [{
     'name': 'leo3'
 }]
 
+users_null = []
+
 users_for_paged = [user for i in range(35)]
