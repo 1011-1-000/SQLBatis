@@ -53,6 +53,14 @@ class BasicDaoTestCase(BasicTestCase):
         self.assertEqual(len(results), 4)
         assert len(results) == 4
 
+    def test_6_bulk_insert_null(self):
+        user_dao = UserDao()
+        pre_res = user_dao.retrieve_all().all()
+        user_dao.bulk_insert(users_null)
+        results = user_dao.retrieve_all().all()
+
+        assert len(results) == len(pre_res)
+
 
 if __name__ == '__main__':
     unittest.main()
